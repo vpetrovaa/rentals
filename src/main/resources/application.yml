@@ -1,0 +1,9 @@
+server:
+  port: 8094
+spring:
+  data:
+  cassandra:
+    keyspace-name: car_rentals
+    port: 9042
+    local-datacenter: datacenter1
+
