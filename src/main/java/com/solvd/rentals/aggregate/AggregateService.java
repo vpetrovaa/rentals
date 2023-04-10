@@ -14,4 +14,8 @@ public interface AggregateService {
 
     Mono<RentalAggregate> create(Event event, PurchaseRental purchaseRental);
 
+    Mono<RentalAggregate> confirm(Event event);
+
+    Mono<RentalAggregate> deny(Event event);
+
 }
