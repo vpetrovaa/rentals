@@ -30,6 +30,8 @@ public class AggregateServiceImpl implements AggregateService {
     public void when(Event event) {
         switch (event.getEventType()) {
             case "RentalCreated" -> log.info("Rental was created");
+            case "RentalConfirmed" -> log.info("Rental was confirmed");
+            case "RentalDenied" -> log.info("Rental was denied");
             default -> throw new IllegalEventException("Exception in " + event.getEventType() + " type");
         }
     }
@@ -51,6 +53,28 @@ public class AggregateServiceImpl implements AggregateService {
         aggregate.setEmail(purchaseRental.getEmail());
         aggregate.setCarNumber(event.getCarNumber());
         return rentalRepository.save(aggregate);
+    }
+
+    @Override
+    public Mono<RentalAggregate> confirm(Event event) {
+        return rentalRepository.findById(event.getAggregateId())
+                .map(aggregate -> {
+                    apply(event);
+                    aggregate.setRevision(aggregate.getRevision() + 1L);
+                    aggregate.setStatus(PurchaseRental.Status.CONFIRMED);
+                    return aggregate;
+                }).flatMap(rentalRepository::save);
+    }
+
+    @Override
+    public Mono<RentalAggregate> deny(Event event) {
+        return rentalRepository.findById(event.getAggregateId())
+                .map(aggregate -> {
+                    apply(event);
+                    aggregate.setRevision(aggregate.getRevision() + 1L);
+                    aggregate.setStatus(PurchaseRental.Status.DENIED);
+                    return aggregate;
+                }).flatMap(rentalRepository::save);
     }
 
 }

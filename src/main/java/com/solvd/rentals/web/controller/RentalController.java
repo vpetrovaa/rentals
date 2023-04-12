@@ -9,10 +9,12 @@ import com.solvd.rentals.web.mapper.AggregateMapper;
 import com.solvd.rentals.web.mapper.RentalMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -29,6 +31,16 @@ public class RentalController {
         Rental rentalMapped = rentalMapper.toEntity(rentalDto);
         Mono<RentalAggregate> rental = commandService.handle(rentalMapped);
         return rental.map(aggregateMapper::toDto);
+    }
+
+    @PutMapping("/confirm/{id}")
+    public void confirm(@PathVariable String id) {
+        commandService.confirm(id);
+    }
+
+    @PutMapping("/deny/{id}")
+    public void deny(@PathVariable String id) {
+        commandService.deny(id);
     }
 
 }

@@ -8,4 +8,8 @@ public interface CommandService {
 
     Mono<RentalAggregate> handle(Rental rental);
 
+    Mono<RentalAggregate> confirm(String id);
+
+    Mono<RentalAggregate> deny(String id);
+
 }

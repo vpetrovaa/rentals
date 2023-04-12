@@ -6,4 +6,13 @@ spring:
     keyspace-name: car_rentals
     port: 9042
     local-datacenter: datacenter1
+  config:
+    import: optional:file:.env[.properties]
+
+kafka:
+  topic: carsharing
+  partitions: 10
+  replicas: 1
+  port: ${KAFKA_PORT}
+  key: ${KAFKA_KEY}
 
