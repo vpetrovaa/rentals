@@ -1,11 +1,15 @@
 server:
   port: 8094
 spring:
+  application:
+    name: rentals
   data:
-  cassandra:
-    keyspace-name: car_rentals
-    port: 9042
-    local-datacenter: datacenter1
+    mongodb:
+      authentication-database: admin
+      username: ${USERNAME}
+      password: ${PASSWORD}
+      port: ${MONGODB_PORT}
+      host: ${MONGODB_HOST}
   config:
     import: optional:file:.env[.properties]
 
